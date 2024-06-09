@@ -572,7 +572,7 @@ bool CSessionBoxList::Delete(const int pos)
       ObjectDelete(m_chartID, m_sessionName + TimeToString(date));
    }
 
-   m_sessionBoxTotal--;
+   m_sessionBoxTotal = ArraySize(m_sessionBoxList);
 
    return true;
 }
