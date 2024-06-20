@@ -293,12 +293,18 @@ bool CSessionBoxList::Tick(void)
       }
    }
 
-   if (sessionBox.high < high || (low > 0.0 && sessionBox.low > low))
+   if (sessionBox.high < high || (low > 0.0 && (sessionBox.low == 0.0 || sessionBox.low > low)))
    {
       if (high > 0.0)
+      {
          sessionBox.high = high;
+         if (m_newSessionStartTime <= TimeCurrent())
+            m_sessionBoxList[m_sessionBoxTotal - 1].high = high;
+      }
       if (low > 0.0)
          sessionBox.low = low;
+         if (m_newSessionStartTime <= TimeCurrent())
+            m_sessionBoxList[m_sessionBoxTotal - 1].low = low;
       DrawSessionBoxObject(sessionBox);
    }
 
@@ -451,7 +457,7 @@ bool CSessionBoxList::HighLowSession(const datetime sessionDay, double &high, do
    datetime sessionStart = sessionDay + m_sessionStartInSeconds;
 
    //--- future session
-   if (TimeCurrent() <= sessionStart)
+   if (TimeCurrent() < sessionStart)
    {
       high = 0.0;
       low = 0.0;
