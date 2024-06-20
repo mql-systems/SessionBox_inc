@@ -358,7 +358,7 @@ bool CSessionBoxList::AddNewSessions(void)
       datetime checkDate;
       while (barIndex >= 0)
       {
-         checkDate = iTime(_Symbol, PERIOD_D1, barIndex);
+         checkDate = iTime(m_symbol, PERIOD_D1, barIndex);
          if (lastDate < checkDate)
             break;
          barIndex--;
@@ -456,7 +456,7 @@ bool CSessionBoxList::HighLowSession(const datetime sessionDay, double &high, do
    }
 
    //--- past and current session
-   int ratesCnt = CopyRates(_Symbol, PERIOD_M1, sessionStart, (sessionStart + m_sessionDurationInSeconds) - 1, ratesArr);
+   int ratesCnt = CopyRates(m_symbol, PERIOD_M1, sessionStart, (sessionStart + m_sessionDurationInSeconds) - 1, ratesArr);
    if (ratesCnt < 1)
    {
       SetLastError("CopyRates error! Error code: " + IntegerToString(::GetLastError()));
