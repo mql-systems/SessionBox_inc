@@ -263,11 +263,12 @@ bool CSessionBoxList::Tick(void)
          return true;
       }
       
-      high = low = 0.0;
       if (m_newSessionCalcBarTime != iTime(m_symbol, PERIOD_M1, 0))
       {
+         high = low = 0.0;
          MqlRates ratesArr[];
          int ratesCnt = CopyRates(m_symbol, PERIOD_M1, m_newSessionStartTime, iTime(m_symbol, PERIOD_M1, 0), ratesArr);
+
          for (int i = 0; i < ratesCnt; i++)
          {
             if (ratesArr[i].high > high)
@@ -275,6 +276,7 @@ bool CSessionBoxList::Tick(void)
             if (low == 0.0 || ratesArr[i].low < low)
                low = ratesArr[i].low;
          }
+         m_newSessionCalcBarTime = iTime(m_symbol, PERIOD_M1, 0);
       }
       else
       {
