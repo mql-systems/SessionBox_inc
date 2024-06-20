@@ -351,7 +351,7 @@ bool CSessionBoxList::AddNewSessions(void)
       barIndex = iBarShift(m_symbol, PERIOD_D1, lastDate, false);
       if (barIndex < 0)
       {
-         SetLastError("iBarShift error! Error code: " + IntegerToString(::GetLastError()));
+         SetLastError("iBarShift error in AddNewSessions()! Error code: " + IntegerToString(::GetLastError()));
          return false;
       }
       
@@ -371,7 +371,7 @@ bool CSessionBoxList::AddNewSessions(void)
    {
       m_sessionBoxTotal = ArraySize(m_sessionBoxList);
 
-      SetLastError("ArrayResize error! Error code: " + IntegerToString(::GetLastError()));
+      SetLastError("ArrayResize error in AddNewSessions()! Error code: " + IntegerToString(::GetLastError()));
       return false;
    }
    m_sessionBoxTotal = ArraySize(m_sessionBoxList);
@@ -421,7 +421,7 @@ bool CSessionBoxList::HighLowDay(const datetime sessionDay, double &high, double
    int barIndex = iBarShift(m_symbol, PERIOD_D1, sessionDay, true);
    if (barIndex < 0)
    {
-      SetLastError("iBarShift error! Error code: " + IntegerToString(::GetLastError()));
+      SetLastError("iBarShift error in HighLowDay()! Error code: " + IntegerToString(::GetLastError()));
       return false;
    }
    
@@ -460,7 +460,7 @@ bool CSessionBoxList::HighLowSession(const datetime sessionDay, double &high, do
    int ratesCnt = CopyRates(m_symbol, PERIOD_M1, sessionStart, (sessionStart + m_sessionDurationInSeconds) - 1, ratesArr);
    if (ratesCnt < 1)
    {
-      SetLastError("CopyRates error! Error code: " + IntegerToString(::GetLastError()));
+      SetLastError("CopyRates error in HighLowSession()! Error code: " + IntegerToString(::GetLastError()));
       return false;
    }
    
