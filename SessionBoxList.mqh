@@ -238,7 +238,7 @@ bool CSessionBoxList::Tick(void)
    }
    
    //--- new session day
-   if (m_newSessionDay != iTime(m_symbol, PERIOD_D1, 0)  && ! ProcessingNewSession())
+   if (m_newSessionDay != iTime(m_symbol, PERIOD_D1, 0) && ! ProcessingNewSession())
       return false;
    
    //--- current session day
@@ -510,8 +510,8 @@ bool CSessionBoxList::Get(const int pos, SessionBox &sessionBox)
       SetLastError("Session not found");
       return false;
    }
-   
-   sessionBox = m_sessionBoxList[pos];
+
+   sessionBox = m_sessionBoxList[m_sessionBoxTotal - pos - 1];
 
    return true;
 }
@@ -561,17 +561,17 @@ int CSessionBoxList::Search(const datetime sessionDay, SessionBox &sessionBox)
 //+------------------------------------------------------------------+
 bool CSessionBoxList::Delete(const int pos)
 {
-   if (pos >= 0 && pos < m_sessionBoxTotal)
+   if (pos < 0 || pos >= m_sessionBoxTotal)
+      return true;
+   
+   datetime date = m_sessionBoxList[pos].date;
+   if (! ArrayRemove(m_sessionBoxList, pos, 1))
    {
-      datetime date = m_sessionBoxList[pos].date;
-      if (! ArrayRemove(m_sessionBoxList, pos, 1))
-      {
-         SetLastError("Session not found");
-         return false;
-      }
-      ObjectDelete(m_chartID, m_sessionName + TimeToString(date));
+      SetLastError("Session not found");
+      return false;
    }
 
+   ObjectDelete(m_chartID, m_sessionName + TimeToString(date));
    m_sessionBoxTotal = ArraySize(m_sessionBoxList);
 
    return true;
@@ -716,7 +716,7 @@ void CSessionBoxList::HighCustomPoints(const int points, bool forceAll)
       
       ObjectSetDouble(m_chartID, m_sessionName + TimeToString(m_sessionBoxList[i].date), OBJPROP_PRICE, OBJPROP_RECTANGLE_HIGH_POINT, m_sessionBoxList[i].high);
    }
-};
+}
 
 //+------------------------------------------------------------------+
 //| Add low points for the custom session                            |
@@ -747,7 +747,7 @@ void CSessionBoxList::LowCustomPoints(const int points, bool forceAll)
       
       ObjectSetDouble(m_chartID, m_sessionName + TimeToString(m_sessionBoxList[i].date), OBJPROP_PRICE, OBJPROP_RECTANGLE_LOW_POINT, m_sessionBoxList[i].low);
    }
-};
+}
 
 //+------------------------------------------------------------------+
 //| Draw a SessionBox object                                         |
@@ -777,7 +777,7 @@ bool CSessionBoxList::DrawSessionBoxObject(const SessionBox &sessionBox)
       datetime sessionStart = sessionBox.date + sessionBox.startInSeconds;
 
       if (! ObjectCreate(m_chartID, sessionBoxName, OBJ_RECTANGLE, m_subWindow, sessionStart, sessionBox.high, sessionStart + sessionBox.durationInSeconds - 1, sessionBox.low))
-      { 
+      {
          SetLastError("Failed to create a rectangle! Error code: " + IntegerToString(::GetLastError()));
          return false;
       }
