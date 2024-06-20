@@ -374,6 +374,7 @@ bool CSessionBoxList::AddNewSessions(void)
       SetLastError("ArrayResize error! Error code: " + IntegerToString(::GetLastError()));
       return false;
    }
+   m_sessionBoxTotal = ArraySize(m_sessionBoxList);
 
    bool isHighLow;
    for (int i = barIndex; i >= 0; i--)
@@ -406,7 +407,7 @@ bool CSessionBoxList::AddNewSessions(void)
             DrawSessionBoxObject(sessionBox);
       }
 
-      m_sessionBoxList[m_sessionBoxTotal++] = sessionBox;
+      m_sessionBoxList[m_sessionBoxTotal - barIndex - 1] = sessionBox;
    }
 
    return true;
