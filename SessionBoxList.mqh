@@ -407,7 +407,7 @@ bool CSessionBoxList::AddNewSessions(void)
             DrawSessionBoxObject(sessionBox);
       }
 
-      m_sessionBoxList[m_sessionBoxTotal - barIndex - 1] = sessionBox;
+      m_sessionBoxList[m_sessionBoxTotal - i - 1] = sessionBox;
    }
 
    return true;
